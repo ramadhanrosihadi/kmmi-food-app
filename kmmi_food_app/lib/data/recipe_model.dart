@@ -28,4 +28,9 @@ class RecipeModel {
   String toJson() => json.encode(toMap());
 
   factory RecipeModel.fromJson(String source) => RecipeModel.fromMap(json.decode(source));
+
+  static List<RecipeModel> fromListDynamic(List<dynamic> datas) {
+    if (datas == null) return [];
+    return datas.map<RecipeModel>((e) => RecipeModel.fromMap(e)).toList();
+  }
 }

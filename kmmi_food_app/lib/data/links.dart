@@ -16,7 +16,7 @@ class Links {
 
   factory Links.fromMap(Map<String, dynamic> map) {
     return Links(
-      self: Self.fromMap(map['self']) ?? Self(),
+      self: Self.fromMap(map['self']),
     );
   }
 

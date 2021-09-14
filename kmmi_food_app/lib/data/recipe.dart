@@ -17,7 +17,7 @@ class Recipe {
   final List<Ingredient> ingredients;
   final double calories;
   final double totalWeight;
-  final int totalTime;
+  final double totalTime;
   Recipe({
     this.uri = '',
     this.label = '',
@@ -72,7 +72,7 @@ class Recipe {
       // ingredients: List<Ingredient>.from(map['ingredients']?.map((x) => Ingredient.fromMap(x) ?? Ingredient()) ?? const []),
       calories: map['calories']?.toDouble() ?? 0.0,
       totalWeight: map['totalWeight']?.toDouble() ?? 0.0,
-      totalTime: map['totalTime']?.toInt() ?? 0,
+      totalTime: map['totalTime']?.toDouble() ?? 0.0,
     );
   }
 

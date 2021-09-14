@@ -1,6 +1,8 @@
 import 'dart:convert';
 
-class Ingredient {
+import 'package:equatable/equatable.dart';
+
+class Ingredient extends Equatable {
   final String text;
   final int weight;
   final String foodCategory;
@@ -37,4 +39,8 @@ class Ingredient {
   String toJson() => json.encode(toMap());
 
   factory Ingredient.fromJson(String source) => Ingredient.fromMap(json.decode(source));
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [text, foodId];
 }

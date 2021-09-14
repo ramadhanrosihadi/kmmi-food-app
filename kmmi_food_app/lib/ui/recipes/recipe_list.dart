@@ -1,22 +1,22 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:kmmi_food_app/api/api_provider.dart';
-import 'package:kmmi_food_app/data/Recipe.dart';
+import 'package:kmmi_food_app/data/recipe.dart';
 import 'package:kmmi_food_app/data/recipe_model.dart';
-import 'package:kmmi_food_app/detail_page.dart';
-import 'package:kmmi_food_app/search_page.dart';
-import 'package:kmmi_food_app/shared_preferences/app_pref.dart';
+import 'package:kmmi_food_app/ui/recipes/recipe_detail.dart';
+import 'package:kmmi_food_app/ui/recipes/search_page.dart';
 
-class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key);
+class RecipeList extends StatefulWidget {
+  const RecipeList({Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _RecipeListState createState() => _RecipeListState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _RecipeListState extends State<RecipeList> {
   Recipe recipe = Recipe();
   String keyword = "chicken";
   List<RecipeModel> recipeModels = [];
@@ -98,15 +98,15 @@ class _HomePageState extends State<HomePage> {
                 var recipe = recipes[index]['recipe'];
                 return GestureDetector(
                   onTap: () async {
-                    // Navigator.push(context, MaterialPageRoute(builder: (context) => DetailPage(recipeModel: data)()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => RecipeDetail(recipe: data.recipe)));
                   },
                   child: Row(
                     children: [
-                      Image.network(
-                        recipe['image'] ?? "-",
+                      CachedNetworkImage(
+                        imageUrl: recipe['image'] ?? "-",
                         height: 50,
                         width: 50,
-                        errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                        errorWidget: (context, url, _) {
                           return Icon(Icons.not_accessible, size: 50);
                         },
                       ),

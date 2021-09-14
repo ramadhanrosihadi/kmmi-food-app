@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:equatable/equatable.dart';
+
 import 'ingredient.dart';
 
-class Recipe {
+class Recipe extends Equatable {
   final String uri;
   final String label;
   final String image;
@@ -79,4 +81,11 @@ class Recipe {
   String toJson() => json.encode(toMap());
 
   factory Recipe.fromJson(String source) => Recipe.fromMap(json.decode(source));
+
+  @override
+  List<Object?> get props => [uri];
+
+  String getCaloriesInfo() {
+    return calories.floor().toString() + " KCAL";
+  }
 }

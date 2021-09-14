@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:equatable/equatable.dart';
+
 import 'self.dart';
 
-class Links {
+class Links extends Equatable {
   final Self self;
   Links({
     required this.self,
@@ -14,7 +16,8 @@ class Links {
     };
   }
 
-  factory Links.fromMap(Map<String, dynamic> map) {
+  factory Links.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return Links(self: Self());
     return Links(
       self: Self.fromMap(map['self']),
     );
@@ -23,4 +26,7 @@ class Links {
   String toJson() => json.encode(toMap());
 
   factory Links.fromJson(String source) => Links.fromMap(json.decode(source));
+
+  @override
+  List<Object?> get props => [self];
 }

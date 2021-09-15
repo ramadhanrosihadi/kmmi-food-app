@@ -1,6 +1,8 @@
 import 'dart:convert';
 
-class Self {
+import 'package:equatable/equatable.dart';
+
+class Self extends Equatable {
   final String href;
   final String title;
   Self({
@@ -25,4 +27,7 @@ class Self {
   String toJson() => json.encode(toMap());
 
   factory Self.fromJson(String source) => Self.fromMap(json.decode(source));
+
+  @override
+  List<Object?> get props => [href, title];
 }

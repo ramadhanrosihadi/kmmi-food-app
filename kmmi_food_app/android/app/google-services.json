@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "219076258815",
+    "project_id": "kmmi-food-final",
+    "storage_bucket": "kmmi-food-final.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:219076258815:android:696789b21aae2ea63815ca",
+        "android_client_info": {
+          "package_name": "com.example.kmmi_food_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "219076258815-cduspoklifc20kmj5pgo86d8nm6m2kan.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqGzbTdmTL4ISjgKoze0o3SZlqSClG4lI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "219076258815-cduspoklifc20kmj5pgo86d8nm6m2kan.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

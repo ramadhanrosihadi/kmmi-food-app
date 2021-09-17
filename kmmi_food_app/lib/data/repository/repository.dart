@@ -5,12 +5,15 @@ abstract class Repository {
   Future init();
   void close();
 
-  List<RecipeModel> getFavouriteRecipes();
+  Future<List<RecipeModel>> getFavouriteRecipes();
   RecipeModel findFavoriteRecipeByUri(String uri);
   void addFavoriteRecipe(RecipeModel recipe);
   void deleteFavoriteRecipe(RecipeModel recipe);
 
-  List<String> getAllGrocery();
+  Future<List<String>> getAllGrocery();
   void addGroceries(List<String> values);
   void deleteGrocery(String value);
+
+  Stream<List<RecipeModel>>? watchFavouriteRecipes();
+  Stream<List<String>>? watchAllGrocery();
 }

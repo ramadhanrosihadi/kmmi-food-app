@@ -21,8 +21,8 @@ class RecipeList extends StatefulWidget {
 
 class _RecipeListState extends State<RecipeList> {
   TextEditingController textEditingController = TextEditingController(text: "chicken");
-  StreamController streamController = StreamController();
-  late Stream<int> stream;
+  StreamController<int> streamController = StreamController<int>();
+  Stream<int> get stream => streamController.stream;
   int second = 0;
 
   @override
@@ -41,7 +41,10 @@ class _RecipeListState extends State<RecipeList> {
   }
 
   void runTimer() {
-    Timer.periodic(Duration(seconds: 1), (timer) {});
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      streamController.sink.add(second);
+      second++;
+    });
   }
 
   @override
@@ -64,12 +67,20 @@ class _RecipeListState extends State<RecipeList> {
       ),
       body: Column(
         children: [
-          Container(
-            padding: EdgeInsets.all(20),
-            child: Text(
-              "$second seconds",
-              style: TextStyle(fontSize: 18),
-            ),
+          StreamBuilder(
+            stream: stream,
+            builder: (context, AsyncSnapshot<int> snapshot) {
+              if (snapshot.connectionState == ConnectionState.active) {
+                return Container(
+                  padding: EdgeInsets.all(20),
+                  child: Text(
+                    "${snapshot.data} seconds",
+                    style: TextStyle(fontSize: 18),
+                  ),
+                );
+              }
+              return SizedBox();
+            },
           ),
           Expanded(
             child: FutureBuilder<Response?>(

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -20,6 +21,15 @@ class RecipeList extends StatefulWidget {
 
 class _RecipeListState extends State<RecipeList> {
   TextEditingController textEditingController = TextEditingController(text: "chicken");
+  StreamController streamController = StreamController();
+  late Stream<int> stream;
+  int second = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    runTimer();
+  }
 
   void navigateToSearchPage() async {
     String? result = await Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage()));
@@ -28,6 +38,10 @@ class _RecipeListState extends State<RecipeList> {
         textEditingController.text = result;
       });
     }
+  }
+
+  void runTimer() {
+    Timer.periodic(Duration(seconds: 1), (timer) {});
   }
 
   @override
@@ -48,62 +62,75 @@ class _RecipeListState extends State<RecipeList> {
           ),
         ),
       ),
-      body: FutureBuilder<Response?>(
-        future: RecipeModel.searchFromApi(textEditingController.text),
-        builder: (context, response) {
-          if (response.connectionState == ConnectionState.done) {
-            if (response.hasError) {
-              return Center(child: Text(response.error.toString()));
-            }
-            List<RecipeModel> recipeModels = RecipeModel.fromResponse(response.data);
-            if (recipeModels.isEmpty) {
-              if (textEditingController.text != "") return Center(child: Text('Pencarian dengan kata kunci ${textEditingController.text} tidak ditemukan'));
-              return Center(
-                child: ElevatedButton.icon(
-                  label: Icon(Icons.search, size: 16),
-                  icon: Text('Search for recipes'),
-                  onPressed: navigateToSearchPage,
-                ),
-              );
-            }
-            return Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: ListView.separated(
-                itemBuilder: (context, index) {
-                  Recipe data = recipeModels[index].recipe;
-                  return GestureDetector(
-                    onTap: () async {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => RecipeDetail(recipeModel: recipeModels[index])));
-                    },
-                    child: Row(
-                      children: [
-                        CachedNetworkImage(
-                          imageUrl: data.image,
-                          height: 50,
-                          width: 50,
-                          errorWidget: (context, url, _) {
-                            return Icon(Icons.not_accessible, size: 50);
+      body: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(20),
+            child: Text(
+              "$second seconds",
+              style: TextStyle(fontSize: 18),
+            ),
+          ),
+          Expanded(
+            child: FutureBuilder<Response?>(
+              future: RecipeModel.searchFromApi(textEditingController.text),
+              builder: (context, response) {
+                if (response.connectionState == ConnectionState.done) {
+                  if (response.hasError) {
+                    return Center(child: Text(response.error.toString()));
+                  }
+                  List<RecipeModel> recipeModels = RecipeModel.fromResponse(response.data);
+                  if (recipeModels.isEmpty) {
+                    if (textEditingController.text != "") return Center(child: Text('Pencarian dengan kata kunci ${textEditingController.text} tidak ditemukan'));
+                    return Center(
+                      child: ElevatedButton.icon(
+                        label: Icon(Icons.search, size: 16),
+                        icon: Text('Search for recipes'),
+                        onPressed: navigateToSearchPage,
+                      ),
+                    );
+                  }
+                  return Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: ListView.separated(
+                      itemBuilder: (context, index) {
+                        Recipe data = recipeModels[index].recipe;
+                        return GestureDetector(
+                          onTap: () async {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => RecipeDetail(recipeModel: recipeModels[index])));
                           },
-                        ),
-                        Expanded(
-                          child: ListTile(
-                            title: Text(data.label),
-                            subtitle: Text("${data.totalTime} minutes"),
+                          child: Row(
+                            children: [
+                              CachedNetworkImage(
+                                imageUrl: data.image,
+                                height: 50,
+                                width: 50,
+                                errorWidget: (context, url, _) {
+                                  return Icon(Icons.not_accessible, size: 50);
+                                },
+                              ),
+                              Expanded(
+                                child: ListTile(
+                                  title: Text(data.label),
+                                  subtitle: Text("${data.totalTime} minutes"),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return Divider();
+                      },
+                      itemCount: recipeModels.length,
                     ),
                   );
-                },
-                separatorBuilder: (context, index) {
-                  return Divider();
-                },
-                itemCount: recipeModels.length,
-              ),
-            );
-          }
-          return Center(child: Text('Mohon tunggu..'));
-        },
+                }
+                return Center(child: Text('Mohon tunggu..'));
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

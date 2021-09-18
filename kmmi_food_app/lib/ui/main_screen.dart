@@ -22,7 +22,13 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     pageList.add(const RecipeList());
-    pageList.add(const FavouriteList());
+    pageList.add(FavouriteList(
+      changeTab: (index) {
+        setState(() {
+          _selectedIndex = index;
+        });
+      },
+    ));
     pageList.add(const GroceryList());
     getCurrentIndex();
   }

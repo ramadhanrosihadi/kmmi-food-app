@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:kmmi_food_app/api/api_provider.dart';
@@ -67,6 +68,27 @@ class _RecipeListState extends State<RecipeList> {
       ),
       body: Column(
         children: [
+          StreamBuilder(
+            stream: FirebaseFirestore.instance.collection("settings").doc("1").snapshots(),
+            builder: (context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.active) {
+                if (snapshot.hasData) {
+                  Map<String, dynamic>? map = snapshot.data!.data();
+                  if (map != null) {
+                    return Container(
+                      padding: EdgeInsets.all(20),
+                      child: Text(
+                        map['title'].toString(),
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    );
+                  }
+                }
+              }
+              return SizedBox();
+            },
+          ),
+          SizedBox(height: 20),
           StreamBuilder(
             stream: stream,
             builder: (context, AsyncSnapshot<int> snapshot) {
